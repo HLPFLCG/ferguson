@@ -10,6 +10,7 @@ const navLinks = [
   { href: '/explore', label: 'Destinations' },
   { href: '/history', label: 'History' },
   { href: '/pricing', label: 'Packages' },
+  { href: '/hotel', label: 'Hotel' },
   { href: '/booking', label: 'Book Now' },
 ]
 
