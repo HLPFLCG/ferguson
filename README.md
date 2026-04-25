@@ -1,1 +1,1 @@
-# ferguson
+# Hotel Manzanillo (manzanillo.lat)

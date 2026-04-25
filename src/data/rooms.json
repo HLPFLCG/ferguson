@@ -1,0 +1,43 @@
+[
+  {
+    "id": "garden-room",
+    "name": "Garden Room",
+    "description": "A serene room overlooking the hotel garden, with hardwood floors, a ceiling fan, and a private bathroom. Sleeps 2.",
+    "localRate": 45,
+    "visitorRate": 95,
+    "sleeps": 2,
+    "image": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80",
+    "features": ["Garden view", "Hardwood floors", "Ceiling fan", "Private bathroom", "Sleeps 2"]
+  },
+  {
+    "id": "ocean-view",
+    "name": "Ocean View Room",
+    "description": "Wake up to the sound and sight of the Caribbean Sea. Our ocean view rooms feature large windows, a private balcony, and are furnished with locally crafted wood furniture. Sleeps 2.",
+    "localRate": 65,
+    "visitorRate": 135,
+    "sleeps": 2,
+    "image": "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&q=80",
+    "features": ["Ocean view", "Private balcony", "Local wood furniture", "Large windows", "Sleeps 2"]
+  },
+  {
+    "id": "jungle-suite",
+    "name": "Jungle Suite",
+    "description": "Our largest accommodation — a full suite with a separate sitting room, kitchenette, and wraparound porch facing the jungle. Perfect for longer stays. Sleeps 4.",
+    "localRate": 85,
+    "visitorRate": 175,
+    "sleeps": 4,
+    "image": "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80",
+    "features": ["Jungle view", "Separate sitting room", "Kitchenette", "Wraparound porch", "Sleeps 4"]
+  },
+  {
+    "id": "dormitory",
+    "name": "Shared Dormitory",
+    "description": "Community-priced dormitory beds for budget travelers and backpackers. Shared bathroom, locker, fan. Sleeps 6 per room.",
+    "localRate": 15,
+    "visitorRate": 35,
+    "sleeps": 6,
+    "image": "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80",
+    "features": ["Shared bathroom", "Personal locker", "Fan", "Budget-friendly", "Sleeps 6 per room"],
+    "perBed": true
+  }
+]
