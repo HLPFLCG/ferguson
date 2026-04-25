@@ -152,12 +152,39 @@ export async function POST(req: NextRequest) {
 
   await kv.put(`hotel-booking:${id}`, JSON.stringify(booking))
 
-  // Update availability counter for each night
+  // Update availability counter for each night.
+  // Note: Cloudflare KV does not support atomic transactions. A small window
+  // exists where two concurrent requests could both pass the pre-check above.
+  // As a best-effort mitigation we re-read the counters after writing and roll
+  // back if an overcommit is detected.
   await Promise.all(
     nightCounts.map(({ night, count }) =>
       kv.put(`hotel:avail:${night}`, String(count + roomCount))
     )
   )
+
+  // Post-write overcommit check
+  const finalCounts = await Promise.all(
+    nights.map(async (night) => {
+      const val = await kv.get(`hotel:avail:${night}`)
+      return { night, count: parseInt(val ?? '0', 10) }
+    })
+  )
+
+  const overcommit = finalCounts.find((n) => n.count > HOTEL_ROOMS)
+  if (overcommit) {
+    // Roll back: remove the booking and restore the counters
+    await kv.delete(`hotel-booking:${id}`)
+    await Promise.all(
+      nightCounts.map(({ night, count }) =>
+        kv.put(`hotel:avail:${night}`, String(count))
+      )
+    )
+    return NextResponse.json(
+      { error: 'Sorry, those dates just became unavailable. Please try again.' },
+      { status: 409 }
+    )
+  }
 
   return NextResponse.json({ bookingId: id, totalPrice, nights: nights.length })
 }
