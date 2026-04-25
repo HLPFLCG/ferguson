@@ -1,5 +1,12 @@
-import NextAuth from 'next-auth'
-import { authOptions } from '@/app/api/auth/auth-options'
+export const runtime = 'edge'
 
-const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }
+import { NextResponse } from 'next/server'
+
+// Auth is handled by /api/auth/login and /api/auth/logout
+export function GET() {
+  return NextResponse.json({ error: 'Not found' }, { status: 404 })
+}
+
+export function POST() {
+  return NextResponse.json({ error: 'Not found' }, { status: 404 })
+}

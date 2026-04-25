@@ -1,6 +1,7 @@
+export const runtime = 'edge'
+
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/auth-options'
+import { verifyToken, getTokenCookieName } from '@/lib/edge-auth'
 
 const allowedFiles = ['content', 'rooms'] as const
 type AllowedFile = (typeof allowedFiles)[number]
@@ -26,8 +27,14 @@ function isValidData(file: AllowedFile, data: unknown): boolean {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions)
-  if (!session) {
+  const token = req.cookies.get(getTokenCookieName())?.value
+  if (!token) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const secret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || ''
+  const email = await verifyToken(token, secret)
+  if (!email) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
