@@ -1,36 +1,39 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import content from '@/data/content.json'
+import packages from '@/data/packages.json'
 
 const highlights = [
   {
     icon: '🏖️',
-    title: 'Beach & Reef',
-    description: 'Swim in crystal-clear Caribbean waters above one of the healthiest coral reefs on the coast.',
+    title: 'Caribbean Coast',
+    description: 'Costa Rica\'s southern Caribbean — pristine reef, jungle-backed beaches, and a community that has protected this corner of the coast for generations.',
     link: '/explore',
   },
   {
     icon: '🌿',
-    title: 'Jungle & Wildlife',
-    description: "The Gandoca-Manzanillo Wildlife Refuge begins at the edge of the village. Sloths, toucans, and sea turtles await.",
+    title: 'Deep Nature',
+    description: 'The Gandoca-Manzanillo Wildlife Refuge borders our primary destination. Sloths, toucans, sea turtles, and some of the healthiest coral reefs in the Americas.',
     link: '/explore',
   },
   {
     icon: '🥁',
-    title: 'Culture & Community',
-    description: "Afro-Caribbean heritage, Bribri indigenous traditions, and the warmest people you'll ever meet.",
+    title: 'Living Culture',
+    description: 'Afro-Caribbean heritage, Bribri indigenous traditions, and communities that have called this coast home for generations. This isn\'t performance — it\'s real life.',
     link: '/history',
   },
 ]
 
 export default function HomePage() {
+  const featuredPackages = packages.slice(0, 3)
+
   return (
     <div>
       {/* Hero */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <Image
           src={content.home.heroImage}
-          alt="Tropical beach in Manzanillo, Costa Rica"
+          alt="Costa Rica Caribbean Coast"
           fill
           className="object-cover"
           priority
@@ -39,7 +42,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-jungle/50" />
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <p className="text-sand/80 text-sm uppercase tracking-[0.3em] mb-4 font-medium">
-            Manzanillo · Costa Rica
+            Ferguson Travel Co. · Caribbean Coast Specialists
           </p>
           <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl font-bold text-sand leading-tight mb-6">
             {content.home.tagline}
@@ -52,13 +55,13 @@ export default function HomePage() {
               href="/booking"
               className="bg-coral hover:bg-coral/90 text-white font-semibold px-8 py-4 rounded-full transition-all hover:shadow-lg hover:-translate-y-0.5 text-sm uppercase tracking-wide"
             >
-              Explore Rooms
+              View Packages
             </Link>
             <Link
               href="/explore"
               className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-sand font-semibold px-8 py-4 rounded-full transition-all border border-sand/30 text-sm uppercase tracking-wide"
             >
-              Discover Manzanillo
+              Discover the Coast
             </Link>
           </div>
         </div>
@@ -70,27 +73,85 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Highlights strip */}
+      {/* Featured packages */}
       <section className="bg-sand py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <p className="text-teal text-sm uppercase tracking-[0.3em] font-medium mb-3">Why Manzanillo</p>
+            <p className="text-teal text-sm uppercase tracking-[0.3em] font-medium mb-3">Curated Trips</p>
             <h2 className="font-heading text-4xl md:text-5xl text-jungle">
-              A Place Apart
+              Featured Packages
             </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {featuredPackages.map((pkg) => (
+              <div
+                key={pkg.id}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 border border-sand"
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src={pkg.image}
+                    alt={pkg.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                </div>
+                <div className="p-6">
+                  <p className="text-teal text-xs uppercase tracking-wider font-medium mb-1">{pkg.tagline}</p>
+                  <h3 className="font-heading text-xl text-jungle mb-2">{pkg.name}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">{pkg.description}</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-xs text-gray-500">from</span>
+                      <span className="font-heading text-2xl text-coral font-bold ml-1">${pkg.pricePerPerson}</span>
+                      <span className="text-xs text-gray-500">/person</span>
+                    </div>
+                    <Link
+                      href="/booking"
+                      className="bg-jungle hover:bg-jungle/90 text-sand text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+                    >
+                      Book Now
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-10">
+            <Link
+              href="/pricing"
+              className="inline-block border-2 border-jungle text-jungle hover:bg-jungle hover:text-sand font-semibold px-8 py-3 rounded-full transition-all text-sm"
+            >
+              View All Packages →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why us */}
+      <section className="bg-jungle py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <h2 className="font-heading text-4xl md:text-5xl text-sand mb-4">
+              Why Travel With Us
+            </h2>
+            <p className="text-sand/70 max-w-xl mx-auto">
+              We know this coast the way you know your own neighborhood.
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {highlights.map((item) => (
               <Link
                 key={item.title}
                 href={item.link}
-                className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 border border-sand"
+                className="group bg-white/10 hover:bg-white/20 rounded-2xl p-8 transition-all border border-white/10 hover:border-white/20"
               >
                 <div className="text-5xl mb-5">{item.icon}</div>
-                <h3 className="font-heading text-2xl text-jungle mb-3 group-hover:text-teal transition-colors">
+                <h3 className="font-heading text-2xl text-sand mb-3 group-hover:text-teal transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed text-sm">{item.description}</p>
+                <p className="text-sand/70 leading-relaxed text-sm">{item.description}</p>
                 <span className="mt-5 inline-block text-teal text-sm font-medium group-hover:underline">
                   Learn more →
                 </span>
@@ -100,31 +161,28 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Quick links */}
-      <section className="bg-jungle py-20">
+      {/* How it works */}
+      <section className="bg-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <h2 className="font-heading text-4xl md:text-5xl text-sand mb-4">
-              Begin Your Journey
-            </h2>
-            <p className="text-sand/70 max-w-xl mx-auto">
-              Everything you need to plan your stay in one of Costa Rica&apos;s last truly authentic villages.
-            </p>
+            <p className="text-teal text-sm uppercase tracking-[0.3em] font-medium mb-3">Simple Process</p>
+            <h2 className="font-heading text-4xl text-jungle">How It Works</h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { href: '/booking', label: 'Book a Room', icon: '🛏️' },
-              { href: '/explore', label: 'Activities', icon: '🤿' },
-              { href: '/history', label: 'Our History', icon: '📖' },
-              { href: '/pricing', label: 'Pricing', icon: '💰' },
+              { step: '01', label: 'Browse Packages', icon: '🗺️', href: '/pricing' },
+              { step: '02', label: 'Select & Book', icon: '📅', href: '/booking' },
+              { step: '03', label: 'Pay via Stripe', icon: '💳', href: '/booking' },
+              { step: '04', label: 'Pack & Arrive', icon: '✈️', href: '/about' },
             ].map((item) => (
               <Link
-                key={item.href}
+                key={item.step}
                 href={item.href}
-                className="group bg-white/10 hover:bg-white/20 rounded-xl p-6 text-center transition-all border border-white/10 hover:border-white/20"
+                className="group text-center p-6 rounded-2xl bg-sand/50 hover:bg-sand border border-sand hover:shadow-md transition-all"
               >
                 <div className="text-3xl mb-3">{item.icon}</div>
-                <span className="text-sand text-sm font-medium group-hover:text-sand/80">
+                <div className="text-teal text-xs font-bold uppercase tracking-widest mb-2">{item.step}</div>
+                <span className="text-jungle text-sm font-medium group-hover:text-teal transition-colors">
                   {item.label}
                 </span>
               </Link>
@@ -133,24 +191,25 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Newsletter / coming soon */}
+      {/* CTA */}
       <section className="bg-teal/10 py-20">
         <div className="max-w-2xl mx-auto px-4 text-center">
           <h2 className="font-heading text-3xl md:text-4xl text-jungle mb-4">
-            Be the First to Know
+            Not sure where to start?
           </h2>
           <p className="text-gray-600 mb-8">
-            We&apos;re putting the finishing touches on something special. 
-            Send us an email and we&apos;ll reach out when we&apos;re ready to welcome guests.
+            Every trip we sell is one we&apos;ve done ourselves. Email us and we&apos;ll 
+            help you find the right package for your travel style.
           </p>
           <a
-            href="mailto:hello@manzanillo.lat?subject=Please notify me when Hotel Manzanillo opens"
+            href="mailto:hello@fergusontravel.com?subject=Trip inquiry"
             className="inline-block bg-jungle hover:bg-jungle/90 text-sand font-semibold px-8 py-4 rounded-full transition-all hover:shadow-lg text-sm uppercase tracking-wide"
           >
-            Get Notified
+            Get in Touch
           </a>
         </div>
       </section>
     </div>
   )
 }
+

@@ -1,0 +1,78 @@
+[
+  {
+    "id": "caribbean-adventure",
+    "name": "Caribbean Adventure",
+    "tagline": "7 nights · Costa Rica Caribbean Coast",
+    "description": "Our flagship package. Seven nights on the southern Caribbean coast with guided reef snorkeling, a Bribri indigenous cultural day, kayaking through the Gandoca mangroves, and wildlife spotting in one of Central America's most biodiverse wildlife refuges.",
+    "pricePerPerson": 1295,
+    "capacity": 8,
+    "duration": 7,
+    "image": "https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=800&q=80",
+    "includes": [
+      "7 nights accommodation",
+      "Daily breakfast",
+      "Guided reef snorkeling",
+      "Bribri cultural day tour",
+      "Mangrove kayaking",
+      "Airport transfers (SJO or LIR)"
+    ],
+    "stripeLinkUrl": "https://buy.stripe.com/placeholder_caribbean_adventure"
+  },
+  {
+    "id": "reef-and-rainforest",
+    "name": "Reef & Rainforest",
+    "tagline": "5 nights · Costa Rica & Panama",
+    "description": "Two countries, one unforgettable journey. Begin on Bocas del Toro's world-class reef in Panama, then cross into Costa Rica for jungle lodges, wildlife spotting, and the pristine beaches of the Talamanca coast.",
+    "pricePerPerson": 895,
+    "capacity": 10,
+    "duration": 5,
+    "image": "https://images.unsplash.com/photo-1518791841217-8f162f1912da?w=800&q=80",
+    "includes": [
+      "5 nights accommodation",
+      "All breakfasts",
+      "Snorkeling equipment",
+      "Expert bilingual guide",
+      "Inter-country land transport",
+      "All border crossings arranged"
+    ],
+    "stripeLinkUrl": "https://buy.stripe.com/placeholder_reef_rainforest"
+  },
+  {
+    "id": "bribri-immersion",
+    "name": "Bribri Cultural Immersion",
+    "tagline": "4 nights · Talamanca Mountain Territory",
+    "description": "A rare opportunity to stay within Bribri indigenous territory in the Talamanca mountains. Community-led cacao ceremonies, traditional medicine walks, river bathing, and meals prepared by community members. All proceeds directly benefit the hosting community.",
+    "pricePerPerson": 750,
+    "capacity": 6,
+    "duration": 4,
+    "image": "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&q=80",
+    "includes": [
+      "4 nights community lodge",
+      "All meals included",
+      "Traditional cacao ceremony",
+      "Medicinal plant walk",
+      "Cultural workshops",
+      "Community contribution (10% of package cost)"
+    ],
+    "stripeLinkUrl": "https://buy.stripe.com/placeholder_bribri_immersion"
+  },
+  {
+    "id": "caribbean-escape",
+    "name": "Caribbean Escape",
+    "tagline": "6 nights · Private & Curated",
+    "description": "The most intimate package we offer — six nights of pure Caribbean magic. Private villa accommodation, a chef dinner under the stars, sunset catamaran sail, and all the unhurried beauty of a coast that hasn't yet been overrun.",
+    "pricePerPerson": 1650,
+    "capacity": 4,
+    "duration": 6,
+    "image": "https://images.unsplash.com/photo-1540541338537-1e7c7af7f65c?w=800&q=80",
+    "includes": [
+      "6 nights private villa",
+      "Daily breakfast",
+      "Private chef dinner",
+      "Sunset catamaran sail",
+      "Guided snorkeling & diving",
+      "Airport transfers & all logistics"
+    ],
+    "stripeLinkUrl": "https://buy.stripe.com/placeholder_caribbean_escape"
+  }
+]

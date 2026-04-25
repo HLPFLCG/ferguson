@@ -3,3 +3,9 @@ compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
 pages_build_output_dir = ".vercel/output/static"
+
+# Cloudflare KV namespace for booking storage
+# Create a KV namespace in the Cloudflare dashboard and paste its ID below
+[[kv_namespaces]]
+binding = "BOOKINGS_KV"
+id = "YOUR_CLOUDFLARE_KV_NAMESPACE_ID_HERE"
