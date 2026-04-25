@@ -5,14 +5,14 @@ import Footer from '@/components/Footer'
 import SessionProvider from '@/components/SessionProvider'
 
 export const metadata: Metadata = {
-  title: "Hotel Manzanillo | Boutique Retreat on Costa Rica's Caribbean Coast",
-  description: 'A boutique retreat in Manzanillo, Costa Rica — where the rainforest meets the sea. Currently being lovingly restored for your arrival.',
-  keywords: ['Manzanillo', 'Costa Rica', 'boutique hotel', 'Caribbean', 'eco-tourism', 'Gandoca-Manzanillo'],
+  title: 'Ferguson Travel Co. | Curated Caribbean & Costa Rica Travel',
+  description: 'Expertly guided travel to Costa Rica\'s Caribbean coast and beyond. Real trips, real places, community-rooted experiences.',
+  keywords: ['Costa Rica', 'Caribbean travel', 'travel agency', 'Manzanillo', 'guided tours', 'eco-tourism', 'Bribri', 'Talamanca'],
   openGraph: {
-    title: 'Hotel Manzanillo',
-    description: 'Where the Rainforest Meets the Sea',
+    title: 'Ferguson Travel Co.',
+    description: 'Real Trips. Real Places. No Shortcuts.',
     url: 'https://manzanillo.lat',
-    siteName: 'Hotel Manzanillo',
+    siteName: 'Ferguson Travel Co.',
     locale: 'en_US',
     type: 'website',
   },

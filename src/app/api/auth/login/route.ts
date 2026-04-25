@@ -4,7 +4,17 @@ import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { createToken, makeTokenCookie, TOKEN_TTL_SECONDS } from '@/lib/edge-auth'
 
-const ADMIN_EMAIL = 'admin@manzanillo.lat'
+function getAllowedEmails(): string[] {
+  const raw = process.env.ADMIN_EMAILS || ''
+  if (raw) {
+    return raw
+      .split(',')
+      .map((e) => e.trim().toLowerCase())
+      .filter(Boolean)
+  }
+  // Legacy fallback
+  return ['admin@manzanillo.lat']
+}
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
@@ -14,7 +24,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing credentials' }, { status: 400 })
   }
 
-  if (email !== ADMIN_EMAIL) {
+  const allowedEmails = getAllowedEmails()
+  if (!allowedEmails.includes((email as string).toLowerCase())) {
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
   }
 
@@ -35,3 +46,4 @@ export async function POST(req: NextRequest) {
   res.headers.set('Set-Cookie', makeTokenCookie(token, TOKEN_TTL_SECONDS))
   return res
 }
+
