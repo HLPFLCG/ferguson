@@ -1,5 +1,19 @@
 import Link from 'next/link'
 
+const exploreLinks = [
+  { href: '/about', label: 'About Us' },
+  { href: '/explore', label: 'Destinations' },
+  { href: '/history', label: 'History' },
+  { href: '/pricing', label: 'Packages' },
+  { href: '/booking', label: 'Book a Trip' },
+  { href: '/hotel', label: 'Hotel Manzanillo' },
+]
+
+const socialLinks = [
+  { href: 'https://instagram.com/fergusontravel', label: 'Instagram', icon: 'IG' },
+  { href: 'https://facebook.com/fergusontravel', label: 'Facebook', icon: 'FB' },
+]
+
 export default function Footer() {
   return (
     <footer className="bg-jungle text-sand">
@@ -17,19 +31,27 @@ export default function Footer() {
             <p className="mt-4 text-sand/60 text-xs">
               Specialists in the Caribbean coast of Costa Rica &amp; Panama
             </p>
+            <div className="mt-6 flex gap-3">
+              {socialLinks.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-xs font-bold text-sand transition-colors"
+                >
+                  {s.icon}
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Links */}
           <div>
             <h4 className="font-heading text-lg font-semibold text-sand mb-4">Explore</h4>
             <ul className="space-y-2 text-sm">
-              {[
-                { href: '/about', label: 'About Us' },
-                { href: '/explore', label: 'Destinations' },
-                { href: '/history', label: 'History' },
-                { href: '/pricing', label: 'Packages' },
-                { href: '/booking', label: 'Book a Trip' },
-              ].map((link) => (
+              {exploreLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -64,21 +86,25 @@ export default function Footer() {
                   hello@fergusontravel.com
                 </a>
               </p>
-              <div className="pt-2">
-                <span className="block text-sand/50 text-xs uppercase tracking-wider mb-2">Follow Along</span>
-                <div className="flex space-x-3">
-                  <span className="text-sand/40 text-xs italic">Social coming soon</span>
-                </div>
-              </div>
+              <p className="text-sand/70">
+                <span className="block text-sand/50 text-xs uppercase tracking-wider mb-1">Hotel</span>
+                <a
+                  href="mailto:hotel@fergusontravel.com"
+                  className="text-teal hover:text-teal/80 transition-colors"
+                >
+                  hotel@fergusontravel.com
+                </a>
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-xs text-sand/50">
+        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-xs text-sand/50 gap-4">
           <p>© {new Date().getFullYear()} Ferguson Travel Co. All rights reserved.</p>
-          <p className="mt-2 md:mt-0">
-            Built for the Caribbean coast 🌿
-          </p>
+          <div className="flex gap-4">
+            <Link href="/privacy" className="hover:text-sand/80 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-sand/80 transition-colors">Terms of Service</Link>
+          </div>
         </div>
       </div>
     </footer>
