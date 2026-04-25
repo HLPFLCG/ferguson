@@ -4,17 +4,44 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import fs from 'fs'
 import path from 'path'
 
+const allowedFiles = ['content', 'rooms'] as const
+type AllowedFile = (typeof allowedFiles)[number]
+
+function isAllowedFile(file: unknown): file is AllowedFile {
+  return typeof file === 'string' && (allowedFiles as readonly string[]).includes(file)
+}
+
+function isValidData(file: AllowedFile, data: unknown): boolean {
+  if (data === null || typeof data !== 'object') return false
+  if (file === 'content') {
+    const d = data as Record<string, unknown>
+    return (
+      typeof d.home === 'object' &&
+      typeof d.about === 'object' &&
+      typeof d.pricing === 'object'
+    )
+  }
+  if (file === 'rooms') {
+    return Array.isArray(data)
+  }
+  return false
+}
+
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { file, data } = await req.json()
+  const body = await req.json()
+  const { file, data } = body
 
-  const allowedFiles = ['content', 'rooms', 'pricing']
-  if (!allowedFiles.includes(file)) {
+  if (!isAllowedFile(file)) {
     return NextResponse.json({ error: 'Invalid file' }, { status: 400 })
+  }
+
+  if (!isValidData(file, data)) {
+    return NextResponse.json({ error: 'Invalid data structure' }, { status: 400 })
   }
 
   const filePath = path.join(process.cwd(), 'src', 'data', `${file}.json`)
