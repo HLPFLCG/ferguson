@@ -35,12 +35,6 @@ function getKV(): KVNamespace | null {
 
 export async function POST(req: NextRequest) {
   const kv = getKV()
-  if (!kv) {
-    return NextResponse.json(
-      { error: 'Booking storage is not available. Please contact us directly to reserve.' },
-      { status: 503 }
-    )
-  }
 
   let body: Record<string, unknown>
   try {
@@ -88,6 +82,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
   }
 
+  // Demo mode: KV not configured — accept the booking without persisting
+  if (!kv) {
+    const id = generateId()
+    const stripeUrl = `${pkg.stripeLinkUrl}?prefilled_email=${encodeURIComponent(emailStr)}`
+    return NextResponse.json({ bookingId: id, stripeUrl, demo: true })
+  }
+
   // Check availability: count non-cancelled bookings for this package + date
   const dateStr = (departureDate as string).slice(0, 10)
   const availKey = `avail:${packageId}:${dateStr}`
@@ -107,7 +108,7 @@ export async function POST(req: NextRequest) {
   const now = new Date().toISOString()
   const booking: Booking = {
     id,
-    packageId,
+    packageId: String(packageId),
     packageName: pkg.name,
     departureDate: dateStr,
     guestName: String(guestName),
