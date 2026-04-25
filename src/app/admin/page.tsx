@@ -7,17 +7,35 @@ import rooms from '@/data/rooms.json'
 type ContentData = typeof content
 type RoomsData = typeof rooms
 
+type HotelBooking = {
+  id: string
+  checkIn: string
+  checkOut: string
+  nights: number
+  rooms: number
+  guestName: string
+  guestEmail: string
+  totalPrice: number
+  status: 'pending' | 'confirmed' | 'cancelled'
+  createdAt: string
+  notes?: string
+}
+
 export default function AdminPage() {
   const [user, setUser] = useState<{ email: string } | null>(null)
   const [authStatus, setAuthStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
-  const [activeTab, setActiveTab] = useState<'content' | 'rooms'>('content')
+  const [activeTab, setActiveTab] = useState<'content' | 'rooms' | 'hotel'>('content')
   const [contentData, setContentData] = useState<ContentData>(content)
   const [roomsData, setRoomsData] = useState<RoomsData>(rooms)
   const [saving, setSaving] = useState(false)
   const [saveMsg, setSaveMsg] = useState('')
+  const [hotelBookings, setHotelBookings] = useState<HotelBooking[]>([])
+  const [hotelLoading, setHotelLoading] = useState(false)
+  const [hotelError, setHotelError] = useState('')
+  const [updatingHotelId, setUpdatingHotelId] = useState<string | null>(null)
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -32,6 +50,50 @@ export default function AdminPage() {
       })
       .catch(() => setAuthStatus('unauthenticated'))
   }, [])
+
+  const fetchHotelBookings = async () => {
+    setHotelLoading(true)
+    setHotelError('')
+    try {
+      const res = await fetch('/api/hotel-bookings/list')
+      const data = await res.json()
+      if (!res.ok) {
+        setHotelError(data.error || 'Failed to load hotel bookings.')
+      } else if (data.unavailable) {
+        setHotelError('Storage not configured — hotel bookings unavailable.')
+      } else {
+        setHotelBookings(data.bookings)
+      }
+    } catch {
+      setHotelError('Network error loading hotel bookings.')
+    } finally {
+      setHotelLoading(false)
+    }
+  }
+
+  const updateHotelBookingStatus = async (id: string, status: string) => {
+    setUpdatingHotelId(id)
+    setHotelError('')
+    try {
+      const res = await fetch(`/api/hotel-bookings/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      })
+      const data = await res.json()
+      if (res.ok && data.booking) {
+        setHotelBookings((prev: HotelBooking[]) =>
+          prev.map((b: HotelBooking) => (b.id === id ? data.booking : b))
+        )
+      } else {
+        setHotelError(data.error || 'Failed to update booking status.')
+      }
+    } catch {
+      setHotelError('Network error updating booking status.')
+    } finally {
+      setUpdatingHotelId(null)
+    }
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -150,17 +212,22 @@ export default function AdminPage() {
 
         {/* Tabs */}
         <div className="flex gap-2 mb-8">
-          {(['content', 'rooms'] as const).map((tab) => (
+          {(['content', 'rooms', 'hotel'] as const).map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => {
+                setActiveTab(tab)
+                if (tab === 'hotel' && hotelBookings.length === 0 && !hotelLoading) {
+                  fetchHotelBookings()
+                }
+              }}
               className={`px-5 py-2.5 rounded-lg text-sm font-medium capitalize transition-colors ${
                 activeTab === tab
                   ? 'bg-jungle text-sand'
                   : 'bg-white text-gray-600 hover:bg-sand border border-gray-200'
               }`}
             >
-              {tab === 'content' ? 'Page Content' : 'Rooms & Pricing'}
+              {tab === 'content' ? 'Page Content' : tab === 'rooms' ? 'Rooms & Pricing' : 'Hotel Bookings'}
             </button>
           ))}
         </div>
@@ -314,6 +381,110 @@ export default function AdminPage() {
                 </p>
               )}
             </div>
+          </div>
+        )}
+
+        {/* Hotel bookings */}
+        {activeTab === 'hotel' && (
+          <div className="bg-white rounded-2xl shadow-sm p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-heading text-2xl text-jungle">Hotel Bookings</h2>
+              <button
+                onClick={fetchHotelBookings}
+                disabled={hotelLoading}
+                className="text-sm text-jungle border border-jungle px-4 py-2 rounded-lg hover:bg-sand transition-colors disabled:opacity-50"
+              >
+                {hotelLoading ? 'Loading...' : 'Refresh'}
+              </button>
+            </div>
+
+            {hotelError && (
+              <p className="text-coral text-sm mb-4">{hotelError}</p>
+            )}
+
+            {!hotelLoading && !hotelError && hotelBookings.length === 0 && (
+              <p className="text-gray-500 text-sm">No hotel bookings yet.</p>
+            )}
+
+            {hotelBookings.length > 0 && (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-sand text-left text-gray-500 text-xs uppercase tracking-wider">
+                      <th className="pb-3 pr-4">Guest</th>
+                      <th className="pb-3 pr-4">Check-in</th>
+                      <th className="pb-3 pr-4">Check-out</th>
+                      <th className="pb-3 pr-4">Nights</th>
+                      <th className="pb-3 pr-4">Rooms</th>
+                      <th className="pb-3 pr-4">Total</th>
+                      <th className="pb-3 pr-4">Status</th>
+                      <th className="pb-3">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-sand">
+                    {hotelBookings.map((b) => (
+                      <tr key={b.id}>
+                        <td className="py-3 pr-4">
+                          <div className="font-medium text-jungle">{b.guestName}</div>
+                          <div className="text-gray-400 text-xs">{b.guestEmail}</div>
+                        </td>
+                        <td className="py-3 pr-4 text-gray-700">{b.checkIn}</td>
+                        <td className="py-3 pr-4 text-gray-700">{b.checkOut}</td>
+                        <td className="py-3 pr-4 text-gray-700">{b.nights}</td>
+                        <td className="py-3 pr-4 text-gray-700">{b.rooms}</td>
+                        <td className="py-3 pr-4 font-medium text-jungle">
+                          ${b.totalPrice.toLocaleString()}
+                        </td>
+                        <td className="py-3 pr-4">
+                          <span
+                            className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
+                              b.status === 'confirmed'
+                                ? 'bg-teal/15 text-teal'
+                                : b.status === 'cancelled'
+                                ? 'bg-coral/15 text-coral'
+                                : 'bg-sand text-gray-600'
+                            }`}
+                          >
+                            {b.status}
+                          </span>
+                        </td>
+                        <td className="py-3">
+                          <div className="flex gap-2">
+                            {b.status !== 'confirmed' && (
+                              <button
+                                onClick={() => updateHotelBookingStatus(b.id, 'confirmed')}
+                                disabled={updatingHotelId === b.id}
+                                className="text-xs bg-teal/10 text-teal px-3 py-1 rounded-lg hover:bg-teal/20 transition-colors disabled:opacity-50"
+                              >
+                                Confirm
+                              </button>
+                            )}
+                            {b.status !== 'cancelled' && (
+                              <button
+                                onClick={() => updateHotelBookingStatus(b.id, 'cancelled')}
+                                disabled={updatingHotelId === b.id}
+                                className="text-xs bg-coral/10 text-coral px-3 py-1 rounded-lg hover:bg-coral/20 transition-colors disabled:opacity-50"
+                              >
+                                Cancel
+                              </button>
+                            )}
+                            {b.status === 'cancelled' && (
+                              <button
+                                onClick={() => updateHotelBookingStatus(b.id, 'pending')}
+                                disabled={updatingHotelId === b.id}
+                                className="text-xs bg-sand text-gray-600 px-3 py-1 rounded-lg hover:bg-sand/80 transition-colors disabled:opacity-50"
+                              >
+                                Restore
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
       </div>
