@@ -4,9 +4,6 @@ compatibility_flags = ["nodejs_compat"]
 
 pages_build_output_dir = ".vercel/output/static"
 
-[build]
-command = "npx @cloudflare/next-on-pages"
-
 # Cloudflare KV namespace for booking storage.
 # Create a KV namespace in the Cloudflare dashboard, then uncomment and fill in:
 # [[kv_namespaces]]
