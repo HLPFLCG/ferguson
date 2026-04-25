@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import fs from 'fs'
-import path from 'path'
+import { authOptions } from '@/app/api/auth/auth-options'
 
 const allowedFiles = ['content', 'rooms'] as const
 type AllowedFile = (typeof allowedFiles)[number]
@@ -44,8 +42,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid data structure' }, { status: 400 })
   }
 
-  const filePath = path.join(process.cwd(), 'src', 'data', `${file}.json`)
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2))
-
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ error: 'Storage not available in this environment' }, { status: 503 })
 }
