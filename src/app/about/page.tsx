@@ -98,7 +98,7 @@ export default function AboutPage() {
 }
 
 
-  return (
+return (
     <div className="pt-16">
       {/* Hero */}
       <section className="relative h-[60vh] min-h-[400px] flex items-end">
