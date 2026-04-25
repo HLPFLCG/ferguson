@@ -1,8 +1,7 @@
+export const runtime = 'edge'
+
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import fs from 'fs'
-import path from 'path'
+import { verifyToken, getTokenCookieName } from '@/lib/edge-auth'
 
 const allowedFiles = ['content', 'rooms'] as const
 type AllowedFile = (typeof allowedFiles)[number]
@@ -28,8 +27,14 @@ function isValidData(file: AllowedFile, data: unknown): boolean {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions)
-  if (!session) {
+  const token = req.cookies.get(getTokenCookieName())?.value
+  if (!token) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const secret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || ''
+  const email = await verifyToken(token, secret)
+  if (!email) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -44,8 +49,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid data structure' }, { status: 400 })
   }
 
-  const filePath = path.join(process.cwd(), 'src', 'data', `${file}.json`)
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2))
-
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ error: 'Storage not available in this environment' }, { status: 503 })
 }

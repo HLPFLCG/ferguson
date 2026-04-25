@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useState, useEffect } from 'react'
 import content from '@/data/content.json'
 import rooms from '@/data/rooms.json'
 
@@ -9,7 +8,8 @@ type ContentData = typeof content
 type RoomsData = typeof rooms
 
 export default function AdminPage() {
-  const { data: session, status } = useSession()
+  const [user, setUser] = useState<{ email: string } | null>(null)
+  const [authStatus, setAuthStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
@@ -19,17 +19,41 @@ export default function AdminPage() {
   const [saving, setSaving] = useState(false)
   const [saveMsg, setSaveMsg] = useState('')
 
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user) {
+          setUser(data.user)
+          setAuthStatus('authenticated')
+        } else {
+          setAuthStatus('unauthenticated')
+        }
+      })
+      .catch(() => setAuthStatus('unauthenticated'))
+  }, [])
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoginError('')
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
     })
-    if (result?.error) {
+    if (res.ok) {
+      const data = await res.json()
+      setUser({ email: data.email })
+      setAuthStatus('authenticated')
+    } else {
       setLoginError('Invalid email or password.')
     }
+  }
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' })
+    setUser(null)
+    setAuthStatus('unauthenticated')
   }
 
   const handleSave = async (file: 'content' | 'rooms') => {
@@ -55,7 +79,7 @@ export default function AdminPage() {
     }
   }
 
-  if (status === 'loading') {
+  if (authStatus === 'loading') {
     return (
       <div className="min-h-screen bg-sand flex items-center justify-center pt-16">
         <div className="text-jungle">Loading...</div>
@@ -63,7 +87,7 @@ export default function AdminPage() {
     )
   }
 
-  if (!session) {
+  if (authStatus === 'unauthenticated') {
     return (
       <div className="min-h-screen bg-sand flex items-center justify-center pt-16 px-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
@@ -114,10 +138,10 @@ export default function AdminPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="font-heading text-3xl text-jungle">Content Dashboard</h1>
-            <p className="text-gray-600 text-sm mt-1">Logged in as {session.user?.email}</p>
+            <p className="text-gray-600 text-sm mt-1">Logged in as {user?.email}</p>
           </div>
           <button
-            onClick={() => signOut()}
+            onClick={handleLogout}
             className="text-sm text-gray-600 hover:text-jungle border border-gray-300 px-4 py-2 rounded-lg transition-colors"
           >
             Sign Out
