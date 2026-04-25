@@ -1,13 +1,58 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import content from '@/data/content.json'
 import packages from '@/data/packages.json'
+import JsonLd from '@/components/JsonLd'
+
+export const metadata: Metadata = {
+  title: 'Travel Packages & Pricing',
+  description:
+    'All-inclusive Costa Rica Caribbean coast travel packages — from $750/person. 4 to 7 night trips including guides, accommodation, cultural experiences, and airport transfers.',
+  alternates: { canonical: 'https://manzanillo.lat/pricing' },
+  openGraph: {
+    title: 'Costa Rica Caribbean Travel Packages',
+    description:
+      'Curated packages from $750/person. Guides, accommodation, and experiences all included — no hidden fees.',
+    url: 'https://manzanillo.lat/pricing',
+  },
+}
+
+const faqs = [
+  {
+    q: 'What is included in the price?',
+    a: 'Each package listing shows exactly what is included. In general: accommodation, specified meals, guided experiences, and in-country transportation. International flights are not included.',
+  },
+  {
+    q: 'How does payment work?',
+    a: 'A 25% deposit secures your spot at booking via Stripe. The remaining balance is due 60 days before your departure date. All payments are processed securely through Stripe.',
+  },
+  {
+    q: 'What is the cancellation policy?',
+    a: 'Cancellations more than 60 days before departure receive a full refund minus the deposit. Cancellations within 60 days are non-refundable but we can transfer your booking to another departure date.',
+  },
+  {
+    q: 'Can I customise a package?',
+    a: 'Yes. Email us at bookings@fergusontravel.com and we can discuss custom itineraries, extensions, or modifications to any standard package.',
+  },
+]
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a },
+  })),
+}
 
 export default function PricingPage() {
   const paragraphs = content.pricing.content.split('\n\n')
 
   return (
     <div className="pt-16">
+      <JsonLd schema={faqSchema} />
       {/* Hero */}
       <section className="bg-jungle py-24 px-4">
         <div className="max-w-4xl mx-auto text-center">
@@ -93,24 +138,7 @@ export default function PricingPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-3xl text-jungle mb-10 text-center">Common Questions</h2>
           <div className="space-y-6">
-            {[
-              {
-                q: 'What is included in the price?',
-                a: 'Each package listing shows exactly what is included. In general: accommodation, specified meals, guided experiences, and in-country transportation. International flights are not included.',
-              },
-              {
-                q: 'How does payment work?',
-                a: 'A 25% deposit secures your spot at booking via Stripe. The remaining balance is due 60 days before your departure date. All payments are processed securely through Stripe.',
-              },
-              {
-                q: 'What is the cancellation policy?',
-                a: 'Cancellations more than 60 days before departure receive a full refund minus the deposit. Cancellations within 60 days are non-refundable but we can transfer your booking to another departure date.',
-              },
-              {
-                q: 'Can I customise a package?',
-                a: 'Yes. Email us at bookings@fergusontravel.com and we can discuss custom itineraries, extensions, or modifications to any standard package.',
-              },
-            ].map((faq) => (
+            {faqs.map((faq) => (
               <div key={faq.q} className="bg-white rounded-xl p-6 shadow-sm">
                 <h3 className="font-heading text-lg text-jungle mb-3">{faq.q}</h3>
                 <p className="text-gray-600 leading-relaxed">{faq.a}</p>

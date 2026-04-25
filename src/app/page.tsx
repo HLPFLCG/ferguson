@@ -2,26 +2,39 @@ import Image from 'next/image'
 import Link from 'next/link'
 import content from '@/data/content.json'
 import packages from '@/data/packages.json'
+import aboutData from '@/data/about.json'
+
+const { testimonials } = aboutData
 
 const highlights = [
   {
     icon: '🏖️',
     title: 'Caribbean Coast',
-    description: 'Costa Rica\'s southern Caribbean — pristine reef, jungle-backed beaches, and a community that has protected this corner of the coast for generations.',
+    description:
+      "Costa Rica's southern Caribbean — pristine reef, jungle-backed beaches, and a community that has protected this corner of the coast for generations.",
     link: '/explore',
   },
   {
     icon: '🌿',
     title: 'Deep Nature',
-    description: 'The Gandoca-Manzanillo Wildlife Refuge borders our primary destination. Sloths, toucans, sea turtles, and some of the healthiest coral reefs in the Americas.',
+    description:
+      'The Gandoca-Manzanillo Wildlife Refuge borders our primary destination. Sloths, toucans, sea turtles, and some of the healthiest coral reefs in the Americas.',
     link: '/explore',
   },
   {
     icon: '🥁',
     title: 'Living Culture',
-    description: 'Afro-Caribbean heritage, Bribri indigenous traditions, and communities that have called this coast home for generations. This isn\'t performance — it\'s real life.',
+    description:
+      "Afro-Caribbean heritage, Bribri indigenous traditions, and communities that have called this coast home for generations. This isn't performance — it's real life.",
     link: '/history',
   },
+]
+
+const howItWorks = [
+  { step: '01', label: 'Browse Packages', icon: '🗺️', href: '/pricing' },
+  { step: '02', label: 'Select & Book', icon: '📅', href: '/booking' },
+  { step: '03', label: 'Pay via Stripe', icon: '💳', href: '/booking' },
+  { step: '04', label: 'Pack & Arrive', icon: '✈️', href: '/about' },
 ]
 
 export default function HomePage() {
@@ -169,12 +182,7 @@ export default function HomePage() {
             <h2 className="font-heading text-4xl text-jungle">How It Works</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { step: '01', label: 'Browse Packages', icon: '🗺️', href: '/pricing' },
-              { step: '02', label: 'Select & Book', icon: '📅', href: '/booking' },
-              { step: '03', label: 'Pay via Stripe', icon: '💳', href: '/booking' },
-              { step: '04', label: 'Pack & Arrive', icon: '✈️', href: '/about' },
-            ].map((item) => (
+            {howItWorks.map((item) => (
               <Link
                 key={item.step}
                 href={item.href}
@@ -198,7 +206,7 @@ export default function HomePage() {
             Not sure where to start?
           </h2>
           <p className="text-gray-600 mb-8">
-            Every trip we sell is one we&apos;ve done ourselves. Email us and we&apos;ll 
+            Every trip we sell is one we&apos;ve done ourselves. Email us and we&apos;ll
             help you find the right package for your travel style.
           </p>
           <a
@@ -207,6 +215,53 @@ export default function HomePage() {
           >
             Get in Touch
           </a>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="bg-sand py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <p className="text-teal text-sm uppercase tracking-[0.3em] font-medium mb-3">Traveler Stories</p>
+            <h2 className="font-heading text-4xl text-jungle">What Our Guests Say</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((t) => (
+              <div key={t.name} className="bg-white rounded-2xl p-8 shadow-sm border border-sand/60">
+                <div className="flex mb-4" aria-label="5 stars">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <span key={s} className="text-coral text-lg">★</span>
+                  ))}
+                </div>
+                <blockquote className="text-gray-700 leading-relaxed text-sm mb-6 italic">
+                  &ldquo;{t.quote}&rdquo;
+                </blockquote>
+                <div>
+                  <p className="font-semibold text-jungle text-sm">{t.name}</p>
+                  <p className="text-gray-400 text-xs">{t.location} · {t.trip}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust strip */}
+      <section className="bg-jungle py-12 px-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { value: '100%', label: 'Locally guided' },
+              { value: '$0', label: 'Hidden fees' },
+              { value: '4+', label: 'Countries covered' },
+              { value: '100%', label: 'Satisfaction rate' },
+            ].map((item) => (
+              <div key={item.label}>
+                <div className="font-heading text-3xl font-bold text-coral mb-1">{item.value}</div>
+                <div className="text-sand/70 text-sm">{item.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

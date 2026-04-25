@@ -1,79 +1,19 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+import activities from '@/data/activities.json'
 
-const activities = [
-  {
-    id: 'wildlife-refuge',
-    icon: '🦜',
-    title: 'Gandoca-Manzanillo Wildlife Refuge',
-    description: "One of Costa Rica's most biodiverse protected areas, the Gandoca-Manzanillo Wildlife Refuge encompasses over 9,000 hectares of coral reef, mangrove, rainforest, and beach. Trails wind through primary jungle to secluded beaches. Leatherback sea turtles nest on Playa Gandoca from March through July. Wildlife spotting includes sloths, monkeys, toucans, and poison dart frogs.",
-    tags: ['Hiking', 'Wildlife', 'Sea Turtles'],
-    highlight: false,
+export const metadata: Metadata = {
+  title: 'Explore Manzanillo',
+  description:
+    "Discover what to do in Manzanillo, Costa Rica — snorkeling the Caribbean reef, kayaking the Gandoca mangroves, Bribri cultural tours, whale watching, and the best local restaurants.",
+  alternates: { canonical: 'https://manzanillo.lat/explore' },
+  openGraph: {
+    title: 'Explore Manzanillo, Costa Rica',
+    description:
+      'Reef, rainforest, culture, and cuisine — everything you need in Manzanillo, Costa Rica.',
+    url: 'https://manzanillo.lat/explore',
   },
-  {
-    id: 'snorkeling',
-    icon: '🤿',
-    title: 'Snorkeling & Scuba Diving',
-    description: "The coral reef system just offshore is one of the healthiest on Costa Rica's Caribbean coast. Snorkel directly from the beach or join a guided dive. Visibility is best from September through November. Expect to see parrotfish, angelfish, moray eels, sea turtles, and vibrant coral formations.",
-    tags: ['Snorkeling', 'Scuba', 'Marine Life'],
-    highlight: false,
-  },
-  {
-    id: 'kayaking',
-    icon: '🛶',
-    title: 'Kayaking Through Mangroves',
-    description: "Paddle through the ethereal mangrove channels of the Gandoca lagoon at dawn or dusk. The mangroves are critical habitat for birds — you'll spot herons, kingfishers, roseate spoonbills, and, if you're lucky, a caiman watching from the bank.",
-    tags: ['Kayaking', 'Birdwatching', 'Dawn & Dusk'],
-    highlight: false,
-  },
-  {
-    id: 'dolphins',
-    icon: '🐬',
-    title: 'Dolphin & Whale Watching',
-    description: 'Bottlenose and spinner dolphins are year-round residents of the waters around Manzanillo. Humpback whales migrate through from October to February (from the Northern Hemisphere) and again from July to October (from the Southern Hemisphere). Boat tours depart from the small dock near the village.',
-    tags: ['Boat Tour', 'Dolphins', 'Whales'],
-    highlight: false,
-  },
-  {
-    id: 'colores',
-    icon: '🍽️',
-    title: 'Restaurante Colores',
-    description: 'The most beloved restaurant in Manzanillo, Colores sits right on the beach with the kind of view that makes it impossible to leave after lunch. The menu is fresh Caribbean seafood — whole fried snapper, lobster rice, garlic shrimp — alongside traditional rice and beans cooked in coconut milk, fried plantains, and the best patacones on the coast. Open daily 11am–9pm. Come hungry, leave slowly.',
-    tags: ['Dining', 'Seafood', 'Caribbean', 'Open Daily 11am–9pm'],
-    highlight: true,
-  },
-  {
-    id: 'beach',
-    icon: '🏖️',
-    title: 'Playa Manzanillo',
-    description: 'The village beach is a long, curved stretch of golden sand backed by coconut palms and the edge of the jungle. The water is calm inside the reef, making it ideal for swimming. At low tide, you can walk the beach for kilometers toward the refuge entrance.',
-    tags: ['Swimming', 'Beach', 'Walking'],
-    highlight: false,
-  },
-  {
-    id: 'bribri-tours',
-    icon: '🌿',
-    title: 'Bribri Cultural Tours',
-    description: 'Venture into the mountains above Manzanillo to visit Bribri communities and learn about their history, language, and relationship with the land. Cacao ceremonies, traditional medicine walks, and cultural exchange with community leaders. All tours are community-led and community-benefiting.',
-    tags: ['Cultural', 'Indigenous', 'Community-Led'],
-    highlight: false,
-  },
-  {
-    id: 'cacao',
-    icon: '🍫',
-    title: 'Cacao Farm Visits',
-    description: 'The cacao farms of the Talamanca region are living museums of indigenous agricultural tradition. Walk the rows of cacao trees, open a pod and taste the raw pulp, watch the fermentation and drying process, and take home a bar of single-origin chocolate made by the farming family themselves.',
-    tags: ['Farm Tour', 'Chocolate', 'Cultural'],
-    highlight: false,
-  },
-  {
-    id: 'guides',
-    icon: '🧭',
-    title: 'Local Guides',
-    description: 'The best guides in Manzanillo are the people who grew up here. Ask at the hotel — we maintain relationships with trusted local guides for all activities, from night hikes to fishing trips to cultural tours.',
-    tags: ['Guided Tours', 'Local', 'All Activities'],
-    highlight: false,
-  },
-]
+}
 
 export default function ExplorePage() {
   return (

@@ -1,23 +1,22 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import content from '@/data/content.json'
+import aboutData from '@/data/about.json'
 
-const values = [
-  {
-    title: 'Community First',
-    description: 'We hire local guides, stay in locally owned accommodation, and contribute directly to the communities that host our tours.',
-    icon: '🤝',
+export const metadata: Metadata = {
+  title: 'About Us',
+  description:
+    "Ferguson Travel Co. was founded on deep local knowledge and genuine community relationships. Learn how we built a travel company around Costa Rica's Caribbean coast.",
+  alternates: { canonical: 'https://manzanillo.lat/about' },
+  openGraph: {
+    title: 'About Ferguson Travel Co.',
+    description:
+      "Built around one question: how do you design a trip that changes someone, without taking anything from the place?",
+    url: 'https://manzanillo.lat/about',
   },
-  {
-    title: 'No Shortcuts',
-    description: 'Every experience we sell is one we\'ve personally done. If it isn\'t worth sending our closest friends on, it isn\'t in our catalogue.',
-    icon: '✨',
-  },
-  {
-    title: 'Sustainable by Design',
-    description: 'Sustainable travel means the people who live where you\'re visiting are genuinely better off because you came. We build that in from the start.',
-    icon: '🌱',
-  },
-]
+}
+
+const { values } = aboutData
 
 export default function AboutPage() {
   const paragraphs = content.about.content.split('\n\n')

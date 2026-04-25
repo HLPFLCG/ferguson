@@ -1,0 +1,39 @@
+{
+  "values": [
+    {
+      "title": "Community First",
+      "description": "We hire local guides, stay in locally owned accommodation, and contribute directly to the communities that host our tours.",
+      "icon": "🤝"
+    },
+    {
+      "title": "No Shortcuts",
+      "description": "Every experience we sell is one we've personally done. If it isn't worth sending our closest friends on, it isn't in our catalogue.",
+      "icon": "✨"
+    },
+    {
+      "title": "Sustainable by Design",
+      "description": "Sustainable travel means the people who live where you're visiting are genuinely better off because you came. We build that in from the start.",
+      "icon": "🌱"
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Sarah K.",
+      "location": "Portland, OR",
+      "trip": "Caribbean Adventure",
+      "quote": "I've done group travel before and it usually feels rushed. This felt like being taken somewhere by a friend who actually lives there. The Bribri day was the best single day I've had traveling in years."
+    },
+    {
+      "name": "Marcus T.",
+      "location": "London, UK",
+      "trip": "Reef & Rainforest",
+      "quote": "The reef at Manzanillo is unlike anything I've snorkeled in the Caribbean. Our guide knew every corner of it. The fact that it's this healthy and this uncrowded feels like a secret the internet hasn't ruined yet."
+    },
+    {
+      "name": "Diane & Rob",
+      "location": "Austin, TX",
+      "trip": "Caribbean Escape",
+      "quote": "We've been traveling together for 25 years and this was genuinely one of the top five trips we've ever taken. The villa, the chef dinner on the beach, the snorkeling — and nobody else around. Worth every cent."
+    }
+  ]
+}
