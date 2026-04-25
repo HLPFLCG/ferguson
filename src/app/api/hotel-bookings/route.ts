@@ -163,7 +163,9 @@ export async function POST(req: NextRequest) {
     )
   )
 
-  // Post-write overcommit check
+  // Post-write overcommit check (best-effort; KV does not support atomic
+  // transactions or distributed locks without Durable Objects). This reduces
+  // but cannot fully eliminate the race window.
   const finalCounts = await Promise.all(
     nights.map(async (night) => {
       const val = await kv.get(`hotel:avail:${night}`)

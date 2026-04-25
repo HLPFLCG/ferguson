@@ -73,17 +73,23 @@ export default function AdminPage() {
 
   const updateHotelBookingStatus = async (id: string, status: string) => {
     setUpdatingHotelId(id)
+    setHotelError('')
     try {
       const res = await fetch(`/api/hotel-bookings/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       })
-      if (res.ok) {
-        setHotelBookings((prev) =>
-          prev.map((b) => (b.id === id ? { ...b, status: status as HotelBooking['status'] } : b))
+      const data = await res.json()
+      if (res.ok && data.booking) {
+        setHotelBookings((prev: HotelBooking[]) =>
+          prev.map((b: HotelBooking) => (b.id === id ? data.booking : b))
         )
+      } else {
+        setHotelError(data.error || 'Failed to update booking status.')
       }
+    } catch {
+      setHotelError('Network error updating booking status.')
     } finally {
       setUpdatingHotelId(null)
     }

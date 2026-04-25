@@ -84,7 +84,9 @@ export async function PATCH(
 
   const nights = getNights(booking.checkIn, booking.checkOut)
 
-  // Cancelling: release the rooms back for each night
+  // Cancelling: release the rooms back for each night.
+  // Math.max(0, ...) mirrors the existing tour-bookings route and guards
+  // against going negative if counters are ever out of sync.
   if (status === 'cancelled' && booking.status !== 'cancelled') {
     await Promise.all(
       nights.map(async (night) => {
